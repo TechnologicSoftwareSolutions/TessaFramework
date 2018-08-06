@@ -16,8 +16,9 @@
 
 package org.tessatech.tessa.framework.rest.client;
 
-import com.google.gson.*;
-import io.atlassian.fugue.Either;
+import java.net.URI;
+import java.time.ZonedDateTime;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -33,12 +34,11 @@ import org.tessatech.tessa.framework.core.exception.system.InternalException;
 import org.tessatech.tessa.framework.core.logging.external.ExternalCallAttributesBuilder;
 import org.tessatech.tessa.framework.core.security.provider.tessa.jwt.client.TessaIAMServiceClient;
 
-import java.lang.reflect.Type;
-import java.net.URI;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+
+import io.atlassian.fugue.Either;
 
 public abstract class AbstractRestClient<ErrorResponse>
 {
@@ -202,12 +202,13 @@ public abstract class AbstractRestClient<ErrorResponse>
 	private <SuccessfulResponse> Either<ErrorResponse, SuccessfulResponse> buildEitherFromResponse(
 			ResponseEntity<String> responseEntity, Class<SuccessfulResponse> successClass)
 	{
+		String responseBody = (responseEntity.getBody() == null ? "{}": responseEntity.getBody());
 		if (!responseEntity.getStatusCode().is1xxInformational() && !responseEntity.getStatusCode().is2xxSuccessful())
 		{
-			return Either.left(gson.fromJson(responseEntity.getBody(), errorClass));
+			return Either.left(gson.fromJson(responseBody, errorClass));
 		}
 
-		return Either.right(gson.fromJson(responseEntity.getBody(), successClass));
+		return Either.right(gson.fromJson(responseBody, successClass));
 	}
 
 	private static Gson buildGson()

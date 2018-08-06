@@ -16,23 +16,17 @@
 
 package org.tessatech.tessa.framework.rest.util;
 
-import com.google.gson.Gson;
-import io.atlassian.fugue.Either;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.tessatech.tessa.framework.core.event.context.EventContext;
 import org.tessatech.tessa.framework.core.event.context.EventContextHolder;
-import org.tessatech.tessa.framework.core.logging.external.ExternalCallAttributesBuilder;
 import org.tessatech.tessa.framework.core.security.context.SecurityContext;
 import org.tessatech.tessa.framework.core.security.context.SecurityContextHolder;
 import org.tessatech.tessa.framework.core.transaction.context.TransactionContext;
 import org.tessatech.tessa.framework.core.transaction.context.TransactionContextHolder;
 import org.tessatech.tessa.framework.core.util.UniqueIdentifierUtils;
 import org.tessatech.tessa.framework.rest.request.TessaHttpHeaders;
-import org.tessatech.tessa.framework.rest.response.TessaError;
-import org.tessatech.tessa.framework.rest.response.TessaErrorResponse;
 
-import java.util.Optional;
+import com.google.gson.Gson;
 
 public class RestUtils
 {
@@ -40,7 +34,11 @@ public class RestUtils
 
 	public static TessaHttpHeaders buildTessaHttpHeaders()
 	{
-		TessaHttpHeaders headers = new TessaHttpHeaders();
+		// TODO setting the content-type header should be optional, possibly overload
+		// this method with a headers Map as parameter
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.add("content-type", "application/json");
+		TessaHttpHeaders headers = new TessaHttpHeaders(httpHeaders);
 		EventContextHolder.getContextOptional().ifPresent(context -> populateTessaHeaders(headers, context));
 		TransactionContextHolder.getContextOptional().ifPresent(context -> populateTessaHeaders(headers, context));
 		return headers;
@@ -67,16 +65,16 @@ public class RestUtils
 	{
 		SecurityContext context = SecurityContextHolder.getContext();
 
-		//TODO This needs to be moved into a service/util, not hacked in here.
+		// TODO This needs to be moved into a service/util, not hacked in here.
 		String token = "Bearer " + context.getSecurityToken().getRawToken();
 		headers.setAuthorization(token);
 
-		return  addClientTraceDetailsToHeaders(headers);
+		return addClientTraceDetailsToHeaders(headers);
 	}
 
 	public static TessaHttpHeaders addClientTraceDetailsToHeaders(TessaHttpHeaders headers)
 	{
-		if(TransactionContextHolder.isPresent())
+		if (TransactionContextHolder.isPresent())
 		{
 			TransactionContext context = TransactionContextHolder.getContext();
 			headers.setSessionId(context.getSessionId());
@@ -85,7 +83,7 @@ public class RestUtils
 			headers.setDeviceType(context.getDeviceType());
 		}
 
-		return  headers;
+		return headers;
 	}
 
 	private static TessaHttpHeaders populateTessaHeaders(TessaHttpHeaders headers, TransactionContext context)
@@ -93,7 +91,7 @@ public class RestUtils
 		String requestId = String.valueOf(UniqueIdentifierUtils.getUniqueId());
 		String correlationId = context.getCorrelationId();
 
-		if(correlationId == null)
+		if (correlationId == null)
 		{
 			correlationId = requestId;
 		}
