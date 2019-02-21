@@ -1,10 +1,7 @@
 # Tessa Framework
-##### _Development of the framework is currently in-progress. Please expect major, breaking changes to the API!_
-
 The Tessa Framework is a small, *highly opinionated* set of annotations and utility code designed to simplify the development of RESTful Webservices and Event-based applications. 
 
 The framework strives to present a set of core functionality with opinionated defaults to reduce, and in some cases eliminte, the boilerplate heavy burdens of configuration, transaction management, exception handling, security, and validations.
- 
 
 #### Our Goals for the Framework, in Order of Importance, are:
 * Opinionated: Our intent is to provide a simple default way to rapidly achieve common functionality.
@@ -32,7 +29,6 @@ Detailed refrence documentation can be found in the wiki.
 
 To quickly import the framework into your project, add the following dependency into your pom:
 
-###### _(As mentioned earlier, development is still in progress. Please expect major, breaking changes to the API.)_
 ```xml
 <dependency>
 	<groupId>org.tessatech.tessa.framework</groupId>
@@ -43,7 +39,7 @@ To quickly import the framework into your project, add the following dependency 
 
 
 ## Building from Source
-We recommend building from source to stay up to date on the latest version. This can be done via executing a maven build on the projects root directory though the command:
+The latest version can be obtained via building the source by executing a maven build on the projects root directory though the command:
 
 ```
 $ mvn clean install
