@@ -10,7 +10,7 @@ The framework strives to present a set of core functionality with opinionated de
 * Non-Dependent: As much as we can, we avoid forcing consumers to depend on or inherit from the framework.
 * Verbose: We aim to simplify the tasks of monitoring, supporting, and debugging applications via automated logging.
 
-#### The Primary Functionalities of the Framework:
+#### The Primary Functions of the Framework:
 * Simplified transaction management automatically handling:
   * Extracting contextual information from request headers and/or classes
   * Mapping error details to generate and return corresponding REST error responses.
@@ -22,7 +22,7 @@ The framework strives to present a set of core functionality with opinionated de
 * Environment based property files with defaults for simple configuration management.
 * Simple (one-line) integration with other services developed on the Tessa Framework.
 * Highly verbose, automated logging of transaction/event details.
-* Utility classes for common functionality such as validations
+* Utility classes for common functionality such as validations.
 
 ## Installation and Using the Framework
 Detailed refrence documentation can be found in the wiki.
